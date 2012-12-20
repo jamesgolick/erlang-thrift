@@ -66,7 +66,10 @@ handle_function(State0=#thrift_processor{protocol = Proto0,
     State1 = State0#thrift_processor{protocol = Proto1},
 
     try
-        Result = Handler:handle_function(Function, Params),
+	{Time, Result} = timer:tc(fun() ->
+	      Handler:handle_function(Function, Params)
+	  end),
+	lager:info("Processed ~p(~p) in ~.4fms", [Function, Params, Time/1000.0]),
         %% {Micro, Result} = better_timer(Handler, handle_function, [Function, Params]),
         %% error_logger:info_msg("Processed ~p(~p) in ~.4fms~n",
         %%                       [Function, Params, Micro/1000.0]),
