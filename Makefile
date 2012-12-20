@@ -1,9 +1,12 @@
 REBAR = ./rebar
 THRIFT = thrift
 
-.PHONY: all compile compile-thrift test clean get-deps
+.PHONY: all compile compile-thrift test clean deps
 
-all: compile
+all: deps compile
+
+deps:
+	@./rebar get-deps
 
 compile:
 	@$(REBAR) compile
@@ -19,6 +22,3 @@ test: compile-thrift
 clean:
 	@rm -f test/*_{thrift,types,constants}.{e,h}rl
 	@$(REBAR) clean
-
-get-deps:
-	@$(REBAR) get-deps
